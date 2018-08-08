@@ -70,7 +70,8 @@ namespace ARApp
             var cameraEcef = cameraLocation.EcefPosition;
 
             var poiLocation = new Location(poi.Latitude, poi.Longitude);
-            var poiEcef = poiLocation.EcefPosition;
+            var enu = poiLocation.EnuPosition(cameraEcef);
+            Debug.WriteLine($"{enu.X}, {enu.Y}, {enu.Z}");
 
 
         }
