@@ -14,10 +14,17 @@ namespace ARApp
         private IGeolocator locator;
         private Position position;
         private Quaternion orientation;
+        private PointOfInterest poi;
 
 		public MainPage()
 		{
 			InitializeComponent();
+            poi = new PointOfInterest
+            {
+                Name = "Domtoren",
+                Latitude = 52.090855,
+                Longitude = 5.121274
+            };
 
         }
 
@@ -58,6 +65,14 @@ namespace ARApp
             Debug.WriteLine("Position Status: {0}", e.Position.Timestamp);
             Debug.WriteLine("Position Latitude: {0}", e.Position.Latitude);
             Debug.WriteLine("Position Longitude: {0}", e.Position.Longitude);
+            Debug.WriteLine("Position Altitude: {0}", e.Position.Altitude);
+            var cameraLocation = new Location(e.Position.Latitude, e.Position.Longitude, e.Position.Altitude);
+            var cameraEcef = cameraLocation.EcefPosition;
+
+            var poiLocation = new Location(poi.Latitude, poi.Longitude);
+            var poiEcef = poiLocation.EcefPosition;
+
+
         }
     }
 }
