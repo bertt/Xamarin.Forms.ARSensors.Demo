@@ -1,9 +1,9 @@
-﻿using Plugin.Geolocator;
+﻿using OpenTK;
+using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Diagnostics;
-using System.Numerics;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -13,8 +13,9 @@ namespace ARApp
 	{
         private IGeolocator locator;
         private Position position;
-        private Quaternion orientation;
+        private System.Numerics.Quaternion orientation;
         private PointOfInterest poi;
+        private Matrix4d projectionMatrix;
 
 		public MainPage()
 		{
@@ -50,6 +51,14 @@ namespace ARApp
                 OrientationSensor.Start(SensorSpeed.Normal);
 
             OrientationSensor.ReadingChanged += OrientationSensor_ReadingChanged; ;
+
+
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            var p = 0;
+            projectionMatrix = ProjectionMatrix.GetProjectionMatrix(width / height, 0.25f, 1000.0f);
 
         }
 
