@@ -3,6 +3,8 @@ using Plugin.Geolocator.Abstractions;
 using Plugin.Permissions.Abstractions;
 using System;
 using System.Diagnostics;
+using System.Numerics;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace ARApp
@@ -11,6 +13,7 @@ namespace ARApp
 	{
         private IGeolocator locator;
         private Position position;
+        private Quaternion orientation;
 
 		public MainPage()
 		{
@@ -32,6 +35,21 @@ namespace ARApp
 
             locator = CrossGeolocator.Current;
             locator.PositionChanged += Locator_PositionChanged;
+
+
+            if (OrientationSensor.IsMonitoring)
+                OrientationSensor.Stop();
+            else
+                OrientationSensor.Start(SensorSpeed.Normal);
+
+            OrientationSensor.ReadingChanged += OrientationSensor_ReadingChanged; ;
+
+        }
+
+        private void OrientationSensor_ReadingChanged(object sender, OrientationSensorChangedEventArgs e)
+        {
+            orientation = e.Reading.Orientation;
+            Debug.WriteLine($"Reading: X: {orientation.X}, Y: {orientation.Y}, Z: {orientation.Z}, W: {orientation.W}");
         }
 
         private void Locator_PositionChanged(object sender, PositionEventArgs e)
